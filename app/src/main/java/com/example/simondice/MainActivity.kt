@@ -128,10 +128,10 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             Log.d("Estado", "Ejecutar secuencia corrutina")
             for (color in sec) {
-                delay(1000)
+                delay(350)
                 Log.d("Estado", "Cambiar a blanco")
                 listaBotones[color-1].backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-                delay(2000)
+                delay(800)
                 when (color) {
                     1 -> listaBotones[color-1].backgroundTintList =
                         ColorStateList.valueOf(Color.parseColor("red"))

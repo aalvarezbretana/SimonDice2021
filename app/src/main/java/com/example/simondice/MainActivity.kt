@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-    var contadorRonda = 0
+    var contadorRonda = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         val rojo = findViewById<Button>(R.id.rojo)
         val amarillo = findViewById<Button>(R.id.amarillo)
         val verde = findViewById<Button>(R.id.verde)
-        val listaBotones = listOf(verde, rojo, azul, amarillo)
+        val listaBotones = listOf(rojo, verde, amarillo, azul)
         val toast = Toast.makeText(applicationContext, "GAME OVER", Toast.LENGTH_SHORT)
-        val toast2 = Toast.makeText(applicationContext, "Inicio", Toast.LENGTH_SHORT)
+        val toast3 = Toast.makeText(applicationContext, "Repite la secuencia", Toast.LENGTH_SHORT)
         val bot: Button = findViewById(R.id.jugar)
         Log.d("Estado", "onCreate")
 
@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
             finalizado = false
             reset(juego, jugador)
             añadirSecuencia(juego)
-            toast2.show()
             ejecutarSecuencia(juego, listaBotones)
+            toast3.show()
             mostrarRonda()
             bot.visibility = View.INVISIBLE
             Log.d("Estado", "Jugar")
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun añadirSecuencia(sec: MutableList<Int>) {
-        val numb = Random.nextInt(4) + 1
+        val numb = (1..4).random()
         sec.add(numb)
     }
 
@@ -104,12 +104,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun añadirSecuenciaUsuario(secUsr: MutableList<Int>, color: Int) {
-        when (color) {
+        /*when (color+1) {
             1 -> secUsr.add(1)
             2 -> secUsr.add(2)
             3 -> secUsr.add(3)
             else -> secUsr.add(4)
-        }
+        }*/
+        secUsr.add(color)
     }
 
     fun ejecutarSecuencia(sec: MutableList<Int>, listaBotones: List<Button>) {
@@ -123,22 +124,26 @@ class MainActivity : AppCompatActivity() {
             }
 
         }*/
+        Log.d("Estado", "Ejecutar secuencia")
         CoroutineScope(Dispatchers.Main).launch {
+            Log.d("Estado", "Ejecutar secuencia corrutina")
             for (color in sec) {
-                delay(350)
+                delay(1000)
+                Log.d("Estado", "Cambiar a blanco")
                 listaBotones[color-1].backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-                delay(800)
+                delay(2000)
                 when (color) {
-                    1 -> listaBotones[color - 1].backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor("green"))
-                    2 -> listaBotones[color - 1].backgroundTintList =
+                    1 -> listaBotones[color-1].backgroundTintList =
                         ColorStateList.valueOf(Color.parseColor("red"))
-                    3 -> listaBotones[color - 1].backgroundTintList =
-                        ColorStateList.valueOf(Color.parseColor("blue"))
-                    4 -> listaBotones[color - 1].backgroundTintList =
+                    2 -> listaBotones[color-1].backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor("green"))
+                    3 -> listaBotones[color-1].backgroundTintList =
                         ColorStateList.valueOf(Color.parseColor("yellow"))
+                    4 -> listaBotones[color-1].backgroundTintList =
+                        ColorStateList.valueOf(Color.parseColor("blue"))
                 }
             }
+            Log.d("Estado", "Repite secuencia")
         }
     }
 }
